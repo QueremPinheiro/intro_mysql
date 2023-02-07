@@ -1,0 +1,370 @@
+- - CRIAÇÃO DA BASE DE DADOS
+
+CREATE DATABASE livraria_xpto;
+
+
+
+- - CONECTANDO A BASE DE DADOS
+
+USE livraria_xpto;
+
+
+
+- - CRIAÇÃO DA TABELA GENEROS
+
+CREATE TABLE generos(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        descricao_genero VARCHAR(50) NOT NULL
+);
+
+
+
+- - CRIAÇÃO DA TABELA AUTORES
+
+CREATE TABLE autores(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        nome VARCHAR(50) NOT NULL,
+        email VARCHAR(50) NOT NULL UNIQUE
+);
+
+
+
+- - CRIAÇÃO DA TABELA FUNCAO
+    
+CREATE TABLE funcao(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        descricao VARCHAR(15) NOT NULL,
+	salario DOUBLE NOT NULL
+);
+    
+
+
+- - CRIAÇÃO DA TABELA TURNOS
+
+CREATE TABLE turno(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        descricao VARCHAR(11) NOT NULL,
+	carga_horaria DOUBLE NOT NULL
+);
+
+
+
+- - CRIAÇÃO DA TABELA EDITORAS
+
+CREATE TABLE editoras(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        nome VARCHAR(50) NOT NULL,
+        cnpj VARCHAR(15) NOT NULL UNIQUE,
+        email VARCHAR(50) NOT NULL UNIQUE,
+        telefone VARCHAR(20) NOT NULL UNIQUE
+);
+
+
+
+- - CRIAÇÃO DA TABELA FORMA DE PAGAMENTO
+
+CREATE TABLE forma_pagamento(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	tipo_pagamento VARCHAR(20)
+);
+
+
+
+- - CRIAÇÃO DA TABELA CLIENTES
+
+CREATE TABLE clientes(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        nome VARCHAR(50) NOT NULL,
+        email VARCHAR(50) NOT NULL UNIQUE,
+        cpf VARCHAR(12) NOT NULL UNIQUE
+);
+
+
+
+- - CRIAÇÃO DA TABELA FUNCIONARIOS
+
+CREATE TABLE funcionarios(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        nome VARCHAR(50) NOT NULL,
+        matricula INTEGER NOT NULL,
+        status_funcionario INTEGER NOT NULL,
+        data_cadastro DATE NOT NULL,
+        id_funcao INTEGER NOT NULL,
+        id_turno INTEGER NOT NULL,
+	FOREIGN KEY (id_funcao) REFERENCES funcao(id),
+        FOREIGN KEY (id_turno) REFERENCES turno(id)
+);
+
+
+
+- - CRIAÇÃO DA TABELA LIVROS
+
+CREATE TABLE livros(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        titulo VARCHAR(50) NOT NULL,
+        isbn VARCHAR(13) NOT NULL,
+	preco DOUBLE NOT NULL,
+        codigo_de_barra INTEGER NOT NULL,
+        data_cadastro DATE NOT NULL,
+        id_genero INTEGER NOT NULL,
+        id_autor INTEGER NOT NULL,
+        id_editor INTEGER NOT NULL,
+	FOREIGN KEY (id_genero) REFERENCES generos(id),
+	FOREIGN KEY (id_autor) REFERENCES autores(id),
+        FOREIGN KEY (id_editor) REFERENCES editoras(id)        
+);
+
+
+
+- - CRIAÇÃO DA TABELA ESTOQUE
+
+CREATE TABLE estoque(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        quantidade_livro INT NOT NULL
+	id_livro INTEGER NOT NULL,
+	FOREIGN KEY (id_livro) REFERENCES livros(id)
+);
+
+
+
+- - CRIAÇÃO DA TABELAS VENDAS
+
+CREATE TABLE vendas(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        data_de_compra DATE NOT NULL,
+        nome_livro_vendido VARCHAR(50) NOT NULL,
+	preco DOUBLE NOT NULL,
+	quantidade_livros INTEGER NOT NUL,
+        id_cliente INTEGER NOT NULL,
+        id_forma_pagamento INTEGER NOT NULL,
+        id_livro INTEGER NOT NULL,
+	id_funcionario INTEGER NOT NULL,
+        FOREIGN KEY (id_cliente) REFERENCES clientes(id),
+        FOREIGN KEY (id_forma_pagamento) REFERENCES forma_pagamento(id),
+        FOREIGN KEY (id_livro) REFERENCES livros(id),
+	FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id)
+);
+
+
+
+- - INSERÇÕES NA TABELA GENEROS
+
+INSERT INTO generos (descricao_genero) VALUES 
+("romance");
+("aventura");
+("terror");
+("suspense");
+("ficção");
+("ação");
+
+
+
+- - INSERÇÕES NA TABELA AUTORES
+
+INSERT INTO autores (nome,email) VALUES 
+("Sarah J. Maas","estilhaco@gmail.com");
+("Sthepen King","rei@gmail.com");
+("Victoria Aveyard","rainha@gmail.com");
+("Mary Shelley","frank@gmail.com");
+("J.K Rowlin","harryzinho@gmail.com");
+("Kiera Cass","katarina@gmail.com");
+("Augusto Cury","augustocury@gmail.com");
+("Júlio Verne","ripjuliozinho@gmail.com");
+
+
+
+- - INSERÇÕES NA TABELA EDITORAS
+
+INSERT INTO editoras (nome,cnpj,email,telefone) VALUES 
+("Arqueira","71897541000102","arqueiroverde@gmail.com","(11)92775-2233");
+("Grupo Editorial Record","16858773000143","recordgp@gmail.com","(11)98790-8712");
+("Rocco","27565358000118","roccolivros@gmail.com","(11)99978-6123");
+("DCL","92351258000150","dclviagem@gmail.com","(11)92792-6647");
+("Grupo Compánhia das Letras","54931250000174","letrasbook@gmail.com","(11)98978-2456")
+	
+
+
+- - INSERÇÕES NA TABELA FUNCAO
+
+INSERT INTO funcao (descricao,salario) VALUES 
+("Gerente",8.712);
+("Vendedor",2.602);
+("Estoquista",1.212);
+
+
+
+- - INSERÇÕES DA TABELA TURNO
+
+INSERT INTO turno(descricao,carga_horaria) VALUES 
+("Matutino",6);
+("Vespertino",6);
+
+
+
+- - INSERÇÃO DA TABELA FORMA_PAGAMENTO
+
+INSERT INTO forma_pagamento (tipo_pagamento) VALUES
+("Pix");
+("Cartão de crédito");
+("A vista");
+
+
+
+- - INSERÇÕES NA TABELA CLIENTES
+
+INSERT INTO clientes (nome,email,cpf) VALUES 
+("Júlia","julinha@gmail.com","295.742.590-48");
+("Leandro","leandross@gmail.com","136.715.470-73");
+("Marcos","marcos@gmail.com","541.974.280-22");
+("Lucas","lucaslc@gmail.com","351.854.510-84");
+("Flávia","flavian@gmail.com","052.861.980-23");
+("João","joaozinho@gmail.com","457.937.970-50");
+
+
+
+- - INSERÇÕES DA TABELA FUNCIONARIOS
+
+INSERT INTO funcionarios(nome,matricula, status_funcionario, data_cadastro, id_turno, id_funcao) VALUES
+("Pedro  da silva",	123456,	1,	"2022-01-20",	1,	2),
+("Marcos Silveira",	321654,	1,	"2022-10-21",	1,	2),
+("João Silvestre",	147852,	1,	"2021-01-22",	1,	2),
+("Augusto Pereira",	369852,	1,	"2023-01-23",	2,	2)
+("Adevair Vitório",	1596327,	1,	"1998-01-24",	1,	1),
+("Ezequiel Barcellos",	3461987,	0,	"2022-01-25",	1,	2),
+("Thiago Andreão",	19555642,	1	"2022-01-26",	1,	2),
+("Junior Silva",	333214,	1	,"2022-01-27"	,2	,2);
+
+
+
+- - INSERÇÕES DA TABELA LIVROS
+
+INSERT INTO livros(titulo, isbn, preco, data_cadastro, cod_barra, id_genero, id_autor, id_editora) VALUES
+("HARRY POTTER 1",	3717502934,	48,	"2022-05-20",	59308158066,	1,	7,	2),
+("HARRY POTTER 2",	6037103689,	39,	"2022-01-21",	99895704364,	3,	8	,2),
+("HARRY POTTER 3",	7997100562,	27,	"2022-06-22",	40745635495,	4,	5,	2),
+("HARRY POTTER 4",	9624849758,	53,	"2022-05-23",	84837016126,	5, 3, 3),
+("HARRY POTTER 5",	9472899286,	60,	"2022-01-24",	92250388426,	5,	4,	3),
+("HARRY POTTER 6",	8528600203,	56,	"2022-01-25",	12539927956,	2,	7,	3),
+("HARRY POTTER 7",	6014655524,	30,	"2022-01-26",	57174752904,	3,	5,	3),
+("SENHOR DOS ANÉIS 1",	9621192921,	67,	"2022-09-27",	84782979020,	2,	8,	2),
+("SENHOR DOS ANÉIS 2",	3752986104,	66,	"2022-10-28",	56562969981,	4,	1,	2),
+("SENHOR DOS ANÉIS 3",	2321211855,	21,	"2022-01-29",	83235742401,	4,	5,	3),
+("SENHOR DOS ANÉIS 4",	933426280,	70,	"2022-01-30",	73978948413,	4,	3,	3),
+("PATATI PATATA EM FAMÍLIA",	6409233573,	4,	"2022-01-31",	38567242352,	1,	6,	2),
+("INTROÇÃO AO MYSQL",	4133810231,	45,	"2022-01-30",	42059427634,	1,	7,	2),
+("JAVA 8",	9239997621,	78,	"2022-01-21",	32637019714,	2,	3,	1),
+("HEROI POR UM DIA",	4525767108,	36,	"2022-01-28",	93111460475,	2,	4,	2),
+("MÃE GANHEI A COPA",	1376648637,	69,	"2022-01-01",	44656438062,	3,	3,	2),
+("MENTE MILIONÁRIA",	554379976,	61,	"2022-01-16",	10151259801,	2,	4,	1),
+("1 MILHÃO EM 60 DIAS",	4862801448,	62,	"2022-01-27",	33629646444,	1,	2,	1),
+("PAI RICO FILHO POBRE",	6040861313,	33,	"2022-02-28",	92408908319,	1,	3,	2),
+("DIÁRIO DE UM BANANA",	8713309107,	40,	"2022-01-29",	98549016009,	4,	8,	2),
+("ANABELE A HISTÓRIA NÃO CONTADA",	3433283880,	37,	"2022-01-30",	41375702770,	5,	3,	1),
+("VONTADE DE VENCER",	3484100484,	70,	"2022-01-21",	33919957628,	2,	6,	1),
+("ROCK ESTILO DE VIDA",	516010772,	20,	"2022-01-12",	54370307170,	2,	3,	2),
+("CÁCLULO 1 - SW",	3715766542,	81,	"2022-01-13",	51564962337,	1,	7,	1),
+("CÁLCULO 2 -JWL",	256205462,	10,	"2022-01-14",	94961813528,	3,	3,	1),
+("GEOMETRIA",	3025013731,	35,	"2022-01-25",	57837178375,	3,	5,	1),
+("INTRODUÇÃO A LÓGICA",	9406304542,	29,	"2022-01-26",	83574001258,	1,	5,	1),
+("ABC DA PROGRAMAÇÃO V1",	2945847474,	17,	"2022-01-17",	87781256511,	1,	2,	1),
+("ABC DA PROGRAMAÇÃO V2" ,9558040266,	58,	"2022-01-28",	46061764365,	4,	3,	1),
+("ABC DA PROGRAMAÇÃO V3",	5035122051,	34,	"2022-01-29",	18222623621,	1,	4,	3),
+("ABC DA PROGRAMAÇÃO V4",	1889235348,	30,	"2022-01-20",	5909368764,	4,	4,	3),
+("ABC DA PROGRAMAÇÃO V5",	9240713393,	89,	"2022-01-11",	35250086127,	5,	2,	2),
+("ABC DA PROGRAMAÇÃO V6",	5212665304,	48,	"2022-01-22",	95136212603,	5,	6,	1),
+("HELLO WORD EM 50 LINGUAGENS",	5492188378,	30,	"2022-01-13",	47659916266,	2,	5,	3),
+("ODEIO BANCO DE DADOS V1",	2990418436,	61,	"2022-01-14",	77440868731,	4,	7,	2),
+("ODEIO BANCO DE DADOS V2",	4361942761,	66,	"2022-01-25",	28145386053,	2,	1,	2),
+("A VIDA ALÉM DO BANCO DE DADOS",	9276322316,	42,	"2022-06-26",	49126484831,	3,	1,	1),
+("123 RUA - LAYOFF BRASIL",	1927241582,	73,	"2022-03-17",	72051394852,	1,	5,	2),
+("BRASIL UM PAÍS DE DEV'S",	1218001174,	72,	"2022-12-18",	12070357853,	3,	4,	2),
+("SEM PACIÊNCIA PARA NOME",	1759947864,	76,	"2022-11-19",	46632949184,	2,	8,	3);
+
+
+
+- - INSERÇÕES DA TABELA ESTOQUE
+
+INSERT INTO estoque(quantidade_livro, id_livro) VALUES
+(8,1),
+(12,2),
+(10,3),
+(46,4),
+(12,5),
+(10,6),
+(10,7),
+(34,8),
+(10,9),
+(7,10),
+(16,11),
+(15,12),
+(10,13),
+(12,14),
+(8,15),
+(11,16),
+(11,17),
+(10,18),
+(11,19),
+(10,20),
+(7,21),
+(6,22),
+(5,23),
+(13,24),
+(15,25),
+(10,26),
+(25,27),
+(10,28),
+(10,29),
+(12,30),
+(10,31),
+(8,32),
+(10,33),
+(46,34),
+(10,35),
+(18,36),
+(20,37),
+(10,38),
+(10,39),
+(8,40);
+
+
+
+- - INSERÇÕES DA TABELA VENDAS
+
+INSERT INTO vendas (data_de_compra,nome_livro_vendido,preco,quantidade_livros,id_cliente,id_forma_pagamento,id_livro,id_funcionario) VALUES
+("2023/01/28","HARRY POTTER 1",48,8,3,1,1,3),
+("2023/02/2","HARRY POTTER 5",60,3,2,2,5,1),
+("2022/11/26","SENHOR DOS ANÉIS 2",66,2,1,3,9,4),
+("2022/12/28","MENTE MILIONÁRIA",61,3,4,2,17,7),
+("2023/01/12","MÃE GANHEI A COPA",69,1,5,1,16,8),
+("2023/02/03","ODEIO BANCO DE DADOS V2",66,2,5,1,36,5);
+("2023/02/06","PATATI PATATA EM FAMÍLIA",61,4,6,2,12,6);
+("2022/11/28","A VIDA ALÉM DO BANCO DE DADOS",42,3,2,3,37,1);
+("2022/10/25","JAVA 8",78,2,6,1,14,2);
+("2023/01/25","HEROI POR UM DIA",36,6,1,2,15,8);
+
+
+- - RELAÇÕES COM O COMANDO SELECT
+
+1) SELECT livros.titulo AS nome_livro, estoque.quantidade_livro AS quantidade FROM livros JOIN estoque ON estoque.id_livro = livros.id;
+
+
+2) SELECT livros.titulo AS nome_livro, autores.nome AS autor FROM livros JOIN autores ON livros.id_autor = autores.id;
+
+
+3) SELECT livros.titulo AS nome_livro, generos.descricao_genero AS genero FROM livros JOIN generos ON livros.id_genero = generos.id;
+
+
+4) SELECT cpf, email FROM clientes;
+
+
+5) SELECT funcionarios.nome AS funcionario, vendas.quantidade_livros AS livros_vedidos FROM vendas JOIN funcionarios ON vendas.id_funcionario = funcionarios.id;
+
+
+6) SELECT preco, codigo_de_barra FROM livros;
+
+
+7) SELECT vendas.data_de_compra, vendas.nome_livro_vendido, vendas.quantidade_livros FROM vendas JOIN livros ON vendas.id_livro = livros.id WHERE data_de_compra BETWEEN "2023-02-01" AND "2023-02-28";
+
+
+
+- - FIM
